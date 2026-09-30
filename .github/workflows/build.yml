@@ -15,9 +15,11 @@ jobs:
           distribution: temurin
           java-version: 17
       - run: unzip -q FloatingTranslator.zip
-      - name: Shrink to arm64 only
+      - name: Download Arabic OCR data
         run: |
-          sed -i 's/versionName = "1.0"/versionName = "1.0"\n        ndk { abiFilters += listOf("arm64-v8a") }/' FloatingTranslator/app/build.gradle.kts
+          mkdir -p FloatingTranslator/app/src/main/assets/tessdata
+          curl -L -o FloatingTranslator/app/src/main/assets/tessdata/ara.traineddata \
+            https://github.com/tesseract-ocr/tessdata_fast/raw/main/ara.traineddata
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: 8.7
